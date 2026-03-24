@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One-time transform: Webflow export paths → static site relative paths."""
+"""One-time transform: Webflow export paths -> static site relative paths."""
 import re
 from pathlib import Path
 
@@ -45,6 +45,20 @@ def inject_overrides(html: str, css_href: str) -> str:
     return html.replace(needle, add, 1)
 
 
+HOME_CASE_STUDIES_SECTION = """
+<section id="Scrolled" class="tile-section"><div class="div-block-4 case-study-list"><a href="disruptions-center/index.html" class="case-study-row w-inline-block"><div class="case-study-row-media"><img src="https://cdn.prod.website-files.com/606d5cd3048a86b7a82fed1e/619e042a1fed163ddadc85ef_DC%20Tile.png" loading="lazy" alt="Disruptions Center tile" class="case-study-row-image"/></div><div class="case-study-row-content"><div class="case-study-row-index">01</div><h2 class="case-study-row-title">Disruptions Center</h2><p class="case-study-row-description">A centralized hub for disruption updates and self-service rebooking when flights are delayed or canceled.</p></div></a><a href="responsive-cancels/index.html" class="case-study-row w-inline-block"><div class="case-study-row-media"><img src="https://cdn.prod.website-files.com/606d5cd3048a86b7a82fed1e/619e042a73814629377832d9_RC%20Tile.png" loading="lazy" alt="Responsive Cancels tile" class="case-study-row-image"/></div><div class="case-study-row-content"><div class="case-study-row-index">02</div><h2 class="case-study-row-title">Responsive Cancels</h2><p class="case-study-row-description">A mobile-first cancellation flow that clarifies refund options and shifts support calls to self-service.</p></div></a><a href="checkout-redesign/index.html" class="case-study-row w-inline-block"><div class="case-study-row-media"><img src="https://cdn.prod.website-files.com/606d5cd3048a86b7a82fed1e/619eb86a6c3bf90ec679f3a6_CCR%20Tile.png" loading="lazy" alt="Checkout Redesign tile" class="case-study-row-image"/></div><div class="case-study-row-content"><div class="case-study-row-index">03</div><h2 class="case-study-row-title">Checkout Redesign</h2><p class="case-study-row-description">A redesign of the checkout journey to streamline purchase decisions and reduce friction at conversion.</p></div></a></div></section>
+"""
+
+
+def replace_home_case_studies(html: str) -> str:
+    pattern = r'<section id="Scrolled" class="tile-section">.*?</section><footer class="body footer">'
+    repl = HOME_CASE_STUDIES_SECTION + '<footer class="body footer">'
+    out = re.sub(pattern, repl, html, count=1, flags=re.DOTALL)
+    if out == html:
+        raise SystemExit("replace_home_case_studies: homepage tile section not found")
+    return out
+
+
 def transform_root(html: str) -> str:
     html = html.replace(CSS_TAG, '<link href="css/kevinlyan.webflow.shared.css" rel="stylesheet" type="text/css"/>')
     reps = [
@@ -56,11 +70,12 @@ def transform_root(html: str) -> str:
     ]
     for a, b in reps:
         html = html.replace(a, b)
-    # Keep the homepage headline custom color class on rebuilds.
     html = html.replace(
         '<h1 class="heading">Welcome in.<br/>',
         '<h1 class="heading moon-gold-heading">Welcome in.<br/>',
     )
+    if 'id="Scrolled"' in html:
+        html = replace_home_case_studies(html)
     html = inject_nav(html)
     html = inject_overrides(html, "css/kevinlyan.webflow.shared.css")
     return fix_protocol(html)
