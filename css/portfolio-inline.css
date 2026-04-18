@@ -116,7 +116,7 @@ img{display:block;border:0}
 /* ═══ LARGE DESKTOP (≥1280px) ═══ */
 @media screen and (min-width:1280px){
   .pc-landing{
-    --pc-home-side-pad: 15vw;
+    --pc-home-side-pad: 20vw;
     --pc-brush-width: 200px;
     --pc-brush-gap: max(10vw, 120px);
   }
@@ -125,7 +125,7 @@ img{display:block;border:0}
     max-width:none;
   }
 
-  /* Keep nav aligned to the same 70% centered content band */
+  /* Keep nav aligned to the same 60% centered content band */
   .pc-nav{left:var(--pc-home-side-pad)}
 
   /* Reserve room for brush + gap on the right side */
@@ -181,7 +181,7 @@ img{display:block;border:0}
 @media screen and (min-width:1280px){
   .pc-scroll-rail{
     left:auto;
-    right:var(--pc-home-side-pad, 15vw);
+    right:var(--pc-home-side-pad, 20vw);
     margin-left:0;
     width:var(--pc-brush-width, 200px);
   }
