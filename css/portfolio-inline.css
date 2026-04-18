@@ -115,23 +115,31 @@ img{display:block;border:0}
 
 /* ═══ LARGE DESKTOP (≥1280px) ═══ */
 @media screen and (min-width:1280px){
-  .pc-page{max-width:none}
+  .pc-landing{
+    --pc-home-side-pad: 15vw;
+    --pc-brush-width: 200px;
+    --pc-brush-gap: max(10vw, 120px);
+  }
+  .pc-page{
+    width:100%;
+    max-width:none;
+  }
 
   /* Keep nav aligned to the same 70% centered content band */
-  .pc-nav{left:15vw}
+  .pc-nav{left:var(--pc-home-side-pad)}
 
   /* Reserve room for brush + gap on the right side */
   .pc-hero-content{
-    padding-left:15vw;
-    padding-right:calc(15vw + 200px + min(10vw, 120px));
+    padding-left:var(--pc-home-side-pad);
+    padding-right:calc(var(--pc-home-side-pad) + var(--pc-brush-width) + var(--pc-brush-gap));
   }
 
   .pc-row{padding:clamp(52px,3.6vw,78px) 0}
 
   /* Tiles occupy the remaining width inside the same centered band */
   .pc-card{
-    margin-left:15vw;
-    margin-right:calc(15vw + 200px + min(10vw, 120px));
+    margin-left:var(--pc-home-side-pad);
+    margin-right:calc(var(--pc-home-side-pad) + var(--pc-brush-width) + var(--pc-brush-gap));
   }
 
   /* Scale visuals up for larger desktop canvases */
@@ -153,9 +161,15 @@ img{display:block;border:0}
   /* Brush stays inside the same centered 70% area */
   .pc-scroll-rail{
     left:auto;
-    right:15vw;
+    right:var(--pc-home-side-pad);
     margin-left:0;
+    width:var(--pc-brush-width);
   }
+  .pc-scroll-paint,
+  .pc-scroll-skyline,
+  .pc-scroll-person,
+  .pc-scroll-person-gap,
+  .pc-scroll-handle{width:var(--pc-brush-width)}
 }
 
 /* ── Card gradients ── */
