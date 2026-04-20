@@ -106,6 +106,32 @@ body:not(.about-page) .div-block-5 > p.overview.longpad {
   }
 }
 
+/* Cap desktop content growth on wide screens */
+@media screen and (min-width: 1400px) {
+  .site-top-nav {
+    width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  body:not(.about-page) .section .cs-container.w-container,
+  body:not(.about-page) .case-header .cs-container.w-container,
+  .body.footer .container.w-container,
+  #hero-layout .cs-container.w-container {
+    width: 920px !important;
+    max-width: 920px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  #hero-layout .cs-container.w-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
 /* About page content alignment */
 #hero-layout .cs-container.w-container {
   max-width: none;

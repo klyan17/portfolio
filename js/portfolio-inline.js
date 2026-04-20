@@ -28,14 +28,14 @@
     }
   });
 
-  const SKY_H=158;
-  const HANDLE_H=219; // viewBox height of handle SVG
-  const GAP=8;
-  const PERSON_H=108;
-  const INITIAL_PAINT_H=179;
+  const DESKTOP_RAIL_SCALE=0.85;
+  const SKY_H_BASE=158;
+  const HANDLE_H_BASE=219; // viewBox height of handle SVG
+  const GAP_BASE=8;
+  const PERSON_H_BASE=108;
+  const INITIAL_PAINT_H_BASE=179;
   const GROWTH_RATE=0.35;
   const LOGO_PAGE_OFFSET=140;
-  const STACK_H=SKY_H+GAP+INITIAL_PAINT_H+GAP+HANDLE_H;
 
   const states=[
     {id:'pc-hero',type:'hero',color:'#f9de8e',logo:null},
@@ -58,11 +58,12 @@
     return secs[0];
   }
 
-  function getDesktopGeometry(vh){
-    const skyTop=clamp(Math.round((vh-STACK_H)*0.5),96,220);
-    const skyBottom=skyTop+SKY_H;
-    const paintTop=skyBottom+GAP;
-    const personPageTop=paintTop+INITIAL_PAINT_H-PERSON_H;
+  function getDesktopGeometry(vh,metrics){
+    const stackH=metrics.skyH+metrics.gap+metrics.initialPaintH+metrics.gap+metrics.handleH;
+    const skyTop=clamp(Math.round((vh-stackH)*0.5),96,220);
+    const skyBottom=skyTop+metrics.skyH;
+    const paintTop=skyBottom+metrics.gap;
+    const personPageTop=paintTop+metrics.initialPaintH-metrics.personH;
     return {skyTop,paintTop,personPageTop};
   }
 
@@ -166,26 +167,33 @@
     const vh=window.innerHeight;
     const sy=window.scrollY||0;
     const active=getActive();
-    const desktopGeo=getDesktopGeometry(vh);
+    const metrics={
+      skyH:SKY_H_BASE*DESKTOP_RAIL_SCALE,
+      handleH:HANDLE_H_BASE*DESKTOP_RAIL_SCALE,
+      gap:GAP_BASE*DESKTOP_RAIL_SCALE,
+      personH:PERSON_H_BASE*DESKTOP_RAIL_SCALE,
+      initialPaintH:INITIAL_PAINT_H_BASE*DESKTOP_RAIL_SCALE
+    };
+    const desktopGeo=getDesktopGeometry(vh,metrics);
     const maxPaintBottom=vh*0.85;
-    const initialPaintBottom=desktopGeo.paintTop+INITIAL_PAINT_H;
+    const initialPaintBottom=desktopGeo.paintTop+metrics.initialPaintH;
     const paintBottom=clamp(initialPaintBottom+sy*GROWTH_RATE, initialPaintBottom, Math.max(initialPaintBottom,maxPaintBottom));
-    const skylineScreenBottom=(desktopGeo.skyTop-sy)+SKY_H;
-    const paintTop=Math.max(0, skylineScreenBottom+GAP);
+    const skylineScreenBottom=(desktopGeo.skyTop-sy)+metrics.skyH;
+    const paintTop=Math.max(0, skylineScreenBottom+metrics.gap);
     const paintH=Math.max(0, paintBottom-paintTop);
-    const handleTop=paintBottom+GAP;
-    const handleTopClamped=Math.min(handleTop, vh-HANDLE_H-8);
-    const paintBottomClamped=Math.min(paintBottom, handleTopClamped-GAP);
+    const handleTop=paintBottom+metrics.gap;
+    const handleTopClamped=Math.min(handleTop, vh-metrics.handleH-8);
+    const paintBottomClamped=Math.min(paintBottom, handleTopClamped-metrics.gap);
     const paintHClamped=Math.max(0, paintBottomClamped-paintTop);
     paint.style.top=paintTop+'px';
     paint.style.height=paintHClamped+'px';
     handle.style.top=handleTopClamped+'px';
     skyline.style.top=(desktopGeo.skyTop-sy)+'px';
-    skyline.style.opacity=(desktopGeo.skyTop-sy+SKY_H>0)?'1':'0';
+    skyline.style.opacity=(desktopGeo.skyTop-sy+metrics.skyH>0)?'1':'0';
     person.style.top=(desktopGeo.personPageTop-sy)+'px';
-    person.style.opacity=(desktopGeo.personPageTop+PERSON_H-sy>0)?'1':'0';
+    person.style.opacity=(desktopGeo.personPageTop+metrics.personH-sy>0)?'1':'0';
     if(personGap){
-      personGap.style.top=(desktopGeo.personPageTop+PERSON_H-sy)+'px';
+      personGap.style.top=(desktopGeo.personPageTop+metrics.personH-sy)+'px';
       personGap.style.opacity=person.style.opacity;
     }
     const hSec=secAtY(handleTopClamped);

@@ -117,8 +117,8 @@ img{display:block;border:0}
 @media screen and (min-width:1280px){
   .pc-landing{
     --pc-home-side-pad: 20vw;
-    --pc-brush-width: 200px;
-    --pc-brush-gap: max(10vw, 120px);
+    --pc-brush-width: 170px;
+    --pc-brush-gap: max(6.5vw, 78px);
   }
   .pc-page{
     width:100%;
@@ -168,12 +168,12 @@ img{display:block;border:0}
 .pc-card-ccr{background:linear-gradient(175deg,#0a1030 0%,#102050 35%,#1a4080 70%,#2a60b0 100%)}
 
 /* ═══ SCROLL RAIL ═══ */
-.pc-scroll-rail{position:fixed;left:50%;margin-left:296px;top:0;width:200px;height:100vh;z-index:30;pointer-events:none}
-.pc-scroll-paint{position:absolute;left:0;width:200px;z-index:1}
-.pc-scroll-skyline{position:absolute;left:0;top:133px;width:200px;z-index:6}
-.pc-scroll-person{position:absolute;left:0;width:200px;height:108px;z-index:5}
-.pc-scroll-person-gap{position:absolute;left:0;width:200px;height:8px;background:#1f2531;z-index:5}
-.pc-scroll-handle{position:absolute;left:0;width:200px;z-index:4}
+.pc-scroll-rail{position:fixed;left:50%;margin-left:296px;top:0;width:var(--pc-brush-width,200px);height:100vh;z-index:30;pointer-events:none}
+.pc-scroll-paint{position:absolute;left:0;width:var(--pc-brush-width,200px);z-index:1}
+.pc-scroll-skyline{position:absolute;left:0;top:133px;width:var(--pc-brush-width,200px);z-index:6}
+.pc-scroll-person{position:absolute;left:0;width:var(--pc-brush-width,200px);height:calc(var(--pc-brush-width,200px) * 0.54);z-index:5}
+.pc-scroll-person-gap{position:absolute;left:0;width:var(--pc-brush-width,200px);height:calc(var(--pc-brush-width,200px) * 0.04);background:#1f2531;z-index:5}
+.pc-scroll-handle{position:absolute;left:0;width:var(--pc-brush-width,200px);z-index:4}
 .pc-scroll-logo{position:absolute;left:50%;transform:translateX(-50%);top:28vh;opacity:0;transition:opacity 200ms ease;z-index:7;display:block}
 .pc-scroll-logo img{mix-blend-mode:screen;display:block}
 
@@ -183,14 +183,31 @@ img{display:block;border:0}
     left:auto;
     right:var(--pc-home-side-pad, 20vw);
     margin-left:0;
-    width:var(--pc-brush-width, 200px);
+    width:var(--pc-brush-width, 170px);
   }
   .pc-scroll-paint,
   .pc-scroll-skyline,
   .pc-scroll-person,
   .pc-scroll-person-gap,
   .pc-scroll-handle{
-    width:var(--pc-brush-width, 200px);
+    width:var(--pc-brush-width, 170px);
+  }
+}
+
+/* Freeze desktop spacing beyond 1400px viewport width */
+@media screen and (min-width:1400px){
+  .pc-landing{
+    --pc-home-side-pad: 240px;
+    --pc-brush-gap: 91px;
+  }
+
+  .pc-page{
+    max-width:1400px;
+    margin:0 auto;
+  }
+
+  .pc-scroll-rail{
+    right:calc((100vw - 1400px)/2 + var(--pc-home-side-pad));
   }
 }
 
