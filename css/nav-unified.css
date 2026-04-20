@@ -109,11 +109,11 @@ body:not(.about-page) .div-block-5 > p.overview.longpad {
 /* Cap desktop content growth on wide screens */
 @media screen and (min-width: 1400px) {
   .site-top-nav {
-    width: 920px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0;
-    padding-right: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: calc((100vw - 920px) / 2);
+    padding-right: calc((100vw - 920px) / 2);
   }
 
   body:not(.about-page) .section .cs-container.w-container,
